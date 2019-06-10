@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import view.RootViewController;
 import view.MemberViewController;
 
+//마이노
 public class Main extends Application {
 	
     private Stage rootStage;
