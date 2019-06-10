@@ -131,9 +131,15 @@ public class MemberViewController implements Initializable {
 		else {
 			Member newMember = 
 					new Member(tfID.getText(), tfPW.getText(), tfName.getText(), tfMobilePhone.getText());
-			data.add(newMember);			
-			tableViewMember.setItems(data);
-			memberService.create(newMember);
+			if(memberService.findByUid(newMember) < 0){
+				data.add(newMember);			
+				tableViewMember.setItems(data);
+				memberService.create(newMember);
+			}
+			else{
+				showAlert("ID를 중복으로 생성할 수 없습니다.");
+			}
+			
 		}
 	}
 	@FXML 
@@ -141,7 +147,11 @@ public class MemberViewController implements Initializable {
 		Member newMember = new Member(tfID.getText(), tfPW.getText(), tfName.getText(), tfMobilePhone.getText());
 
 		int selectedIndex = tableViewMember.getSelectionModel().getSelectedIndex();
-		if (selectedIndex >= 0) {
+		
+		if(selectedIndex != memberService.findByUid(newMember)){
+			showAlert("아이디를 수정하면 업데이트 할 수 없습니다.");
+		}
+		else if (selectedIndex >= 0) {
 			tableViewMember.getItems().set(selectedIndex, newMember);
 			memberService.update(newMember);			
 		} else {
