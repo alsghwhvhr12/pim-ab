@@ -81,17 +81,7 @@ public class MemberViewController implements Initializable {
 	}
 	
 	String str = ""; // 인스턴스 변수 - 객체 변수, 객체가 존재하는 동안 메모리에 존재
-	@FXML 
-	private void handleExecute() { // event source, listener, handler
-		str = str + tfExecute.getText() + "\n";
-		//str = ts.setTextArea(tfExecute.getText());
-		/*
-		str = taExecute.getText();
-		String name = tfExecute.getText();
-		str = str + ts.appendTextArea(name);
-		*/
-		taExecute.setText(str);
-	}
+	String str1 = "";
 	
 	private void showMemberInfo(Member member) {
 		if (member != null) {
@@ -107,13 +97,49 @@ public class MemberViewController implements Initializable {
 		     tfMobilePhone.setText("010");
 		 }
 	}
-	
 	private void loadMemberTableView() {
 		memberList = memberService.readList();
-		for(Member m : memberList) {
-			data.add(m);
+		if(str1.equals("")){
+			data.clear();
+			for(Member m : memberList) {
+				data.add(m);	
+				
+			}
+			
+		}
+		else if(!str1.equals("")){
+			data.clear();
+			for(Member m : memberList) {
+				if(m.getUid().equals(str1)){
+					data.add(m);	
+				}
+			}
 		}
 		tableViewMember.setItems(data);
+		
+		
+	}
+	
+	@FXML 
+	private void handleExecute() { // event source, listener, handler
+		str1 = tfExecute.getText();
+		//str = ts.setTextArea(tfExecute.getText());
+		/*
+		str = taExecute.getText();
+		String name = tfExecute.getText();
+		str = str + ts.appendTextArea(name);
+		*/
+		Member newMember = 
+				new Member(str1,"","","");
+		if(memberService.findByUid(newMember) >= 0){
+			str = "검색한 아이디가 있습니다.";
+		}
+		else{
+			str = "검색한 아이디가 없습니다.";
+		}
+		System.out.println(tfExecute.getText());
+		taExecute.setText(str);
+		loadMemberTableView();
 	}
 	
 	
